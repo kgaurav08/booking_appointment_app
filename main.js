@@ -51,5 +51,22 @@ function onSubmit(e) {
     localStorage.removeItem(myObj.email);
     userList.removeChild(li);
    };
+
+    // create an edit button
+  const editBtn = document.createElement("input");
+  editBtn.type = "button";
+  editBtn.value = "Edit";
+  editBtn.classList = "editBtn";
+ 
+
+  editBtn.onclick = ()=> {
+    localStorage.removeItem(myObj.email);
+    nameInput.value = myObj.name;
+    emailInput.value = myObj.email;
+    userList.removeChild(li);
+  };
+  li.append(editBtn);
+  userList.appendChild(li);
+
   }
 }
