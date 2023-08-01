@@ -39,5 +39,17 @@ function onSubmit(e) {
   // Clear fields
   nameInput.value = "";
   emailInput.value = "";
+
+   //create a delete button
+   const deletebtn = document.createElement("input");
+   deletebtn.type = "button";
+   deletebtn.value = "Delete";
+   deletebtn.classList = "deleteBtn";
+    li.appendChild(deletebtn);
+ 
+   deletebtn.onclick = ()=> {
+    localStorage.removeItem(myObj.email);
+    userList.removeChild(li);
+   };
   }
 }
