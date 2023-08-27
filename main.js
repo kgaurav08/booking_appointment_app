@@ -1,4 +1,3 @@
-// Put DOM elements into variables
 const myForm = document.querySelector('#my-form');
 const nameInput = document.querySelector('#name');
 const emailInput = document.querySelector('#email');
@@ -10,9 +9,9 @@ myForm.addEventListener('submit', onSubmit);
 
 function onSubmit(e) {
   e.preventDefault();
+
   
-  if(nameInput.value === '' || emailInput.value === '') {
-    // alert('Please enter all fields');
+  if (nameInput.value === '' || emailInput.value === '') {
     msg.classList.add('error');
     msg.innerHTML = 'Please enter all fields';
 
@@ -21,52 +20,74 @@ function onSubmit(e) {
   } else {
     // Create new list item with user
     let li = document.createElement('li');
+    const name = nameInput.value;
+    const email = emailInput.value;
+    const myObj = {
+      name,
+      email,
+    };
 
-    // Add text node with input values
-    li.appendChild(document.createTextNode(`${nameInput.value}: ${emailInput.value}`));
-   // Append to ul
-    users.appendChild(li);
+    localStorage.setItem(myObj.email, JSON.stringify(myObj));
+    // showUserOnScreen(myObj);
 
-  //localStorage.setItem('userDetailsName', nameInput.value);
-  //localStorage.setItem('userEmail', emailInput.value);
-  let myObj = {
-    name: nameInput.value,
-    email: emailInput.value,
-  };
-  let UserDetails_serialize = JSON.stringify(myObj);
-  localStorage.setItem(emailInput.value, UserDetails_serialize);
+   
+    nameInput.value = '';
+    emailInput.value = '';
 
-  // Clear fields
-  nameInput.value = "";
-  emailInput.value = "";
+    axios
+      .post(
+        'https://crudcrud.com/api/870e52f9a5c644da95335ac7f6094652/application10',
+        myObj
+      )
+      .then((response) => {
+        console.log(response.data);
+        showUserOnScreen(myObj);
+      })
+      .catch((err) => {
+        const error = document.getElementById('error');
+        error.innerHTML = 'Something went wrong';
+        console.log(err);
 
-   //create a delete button
-   const deletebtn = document.createElement("input");
-   deletebtn.type = "button";
-   deletebtn.value = "Delete";
-   deletebtn.classList = "deleteBtn";
-    li.appendChild(deletebtn);
- 
-   deletebtn.onclick = ()=> {
-    localStorage.removeItem(myObj.email);
-    userList.removeChild(li);
-   };
-
-    // create an edit button
-  const editBtn = document.createElement("input");
-  editBtn.type = "button";
-  editBtn.value = "Edit";
-  editBtn.classList = "editBtn";
- 
-
-  editBtn.onclick = ()=> {
-    localStorage.removeItem(myObj.email);
-    nameInput.value = myObj.name;
-    emailInput.value = myObj.email;
-    userList.removeChild(li);
-  };
-  li.append(editBtn);
-  userList.appendChild(li);
+      });   
 
   }
+}
+
+  //  localStorage.setItem('userDetailsName', nameInput.value);
+  //  localStorage.setItem('userEmail', emailInput.value);
+  
+function showUserOnScreen(myObj) {
+  const li = document.createElement('li');
+  li.textContent = `${myObj.name}: ${myObj.email}`;
+
+  
+ //create a delete button
+ const deletebtn = document.createElement("input");
+ deletebtn.type = "button";
+ deletebtn.value = "Delete";
+ deletebtn.classList = "deleteBtn";
+  li.appendChild(deletebtn);
+
+
+ deletebtn.onclick = ()=> {
+  localStorage.removeItem(myObj.email);
+  userList.removeChild(li);
+ };
+
+  
+ // create an edit button
+ const editBtn = document.createElement("input");
+ editBtn.type = "button";
+ editBtn.value = "Edit";
+ editBtn.classList = "editBtn";
+
+
+ editBtn.onclick = ()=> {
+   localStorage.removeItem(myObj.email);
+   nameInput.value = myObj.name;
+   emailInput.value = myObj.email;
+   userList.removeChild(li);
+ };
+ li.append(editBtn);
+ userList.appendChild(li);
 }
