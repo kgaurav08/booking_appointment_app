@@ -36,7 +36,7 @@ function onSubmit(e) {
 
     axios
       .post(
-        'https://crudcrud.com/api/870e52f9a5c644da95335ac7f6094652/application10',
+        'https://crudcrud.com/api/28ed3624f6184a9cb93388e0e2cf2365/application10',
         myObj
       )
       .then((response) => {
@@ -45,13 +45,28 @@ function onSubmit(e) {
       })
       .catch((err) => {
         const error = document.getElementById('error');
-        error.innerHTML = 'Something went wrong';
+        error.innerHTML="<h4>Something went wrong</h4>";
         console.log(err);
 
       });   
 
   }
 }
+document.addEventListener('DOMContentLoaded', () => {
+  //make a get request to retrieve user data from crudcrud api
+  axios
+  .get('https://crudcrud.com/api/28ed3624f6184a9cb93388e0e2cf2365/application10')
+  .then((response) => {
+    for(let i=0; i<response.data.length; i++){
+      showUserOnScreen(response.data[i]);
+    }
+  })
+  .catch((err) => {
+    const error = document.getElementById('error');
+    error.innerHTML ='Error retrieving user data';
+    console.log(err);
+  });
+});
 
   //  localStorage.setItem('userDetailsName', nameInput.value);
   //  localStorage.setItem('userEmail', emailInput.value);
